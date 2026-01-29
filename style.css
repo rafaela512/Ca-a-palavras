@@ -1,0 +1,687 @@
+:root {
+    --primary: #8b5cf6;
+    --primary-glow: rgba(139, 92, 246, 0.5);
+    --secondary: #06b6d4;
+    --background: #0f172a;
+    --surface: rgba(30, 41, 59, 0.7);
+    --text: #f8fafc;
+    --text-dim: #94a3b8;
+    --success: #10b981;
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --font-main: 'Fira Mono', monospace;
+    /* Changed to monospace for Word Search feel */
+}
+
+/* Hard Mode Theme Overrides */
+body.difficulty-hard {
+    --primary: #f43f5e;
+    /* Rose/Red */
+    --primary-glow: rgba(244, 63, 94, 0.5);
+    --secondary: #fb923c;
+    /* Orange */
+    --background: #0f0505;
+    /* Very Dark Red/Black */
+    --surface: rgba(30, 10, 10, 0.8);
+    --glass-border: rgba(244, 63, 94, 0.2);
+}
+
+/* Easy Mode Theme Overrides (Green) */
+body.difficulty-easy {
+    --primary: #10b981;
+    /* Emerald/Green */
+    --primary-glow: rgba(16, 185, 129, 0.5);
+    --secondary: #3b82f6;
+    /* Blue */
+    --background: #05100a;
+    /* Very Dark Green */
+    --surface: rgba(10, 30, 20, 0.8);
+    --glass-border: rgba(16, 185, 129, 0.2);
+}
+
+/* Medium Mode Theme Overrides (Purple/Cyan - Standard) */
+body.difficulty-medium {
+    --primary: #8b5cf6;
+    --primary-glow: rgba(139, 92, 246, 0.5);
+    --secondary: #06b6d4;
+    --background: #0f172a;
+    --surface: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Red-themed blobs for hard mode */
+body.difficulty-hard .blob-1 {
+    background: #f43f5e;
+    opacity: 0.4;
+}
+
+body.difficulty-hard .blob-2 {
+    background: #9d174d;
+    opacity: 0.3;
+}
+
+body.difficulty-hard .blob-3 {
+    background: #f43f5e;
+    opacity: 0.15;
+}
+
+/* Green-themed blobs for easy mode */
+body.difficulty-easy .blob-1 {
+    background: #10b981;
+    opacity: 0.3;
+}
+
+body.difficulty-easy .blob-2 {
+    background: #3b82f6;
+    opacity: 0.2;
+}
+
+body.difficulty-easy .blob-3 {
+    background: #10b981;
+    opacity: 0.1;
+}
+
+/* Hard Mode Font & Layout Overrides */
+body.difficulty-hard .game-board-wrapper {
+    max-width: 850px;
+    /* Give more space for the 18x18 grid */
+}
+
+body.difficulty-hard .cell {
+    font-size: clamp(1.2rem, 3.5vw, 1.7rem);
+    /* Proportional scaling for dense grid */
+}
+
+/* ... (rest of CSS) */
+
+/* Updated Intro Screen Styles */
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.85);
+    /* Light glass effect */
+    padding: 3rem;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 450px;
+    color: #1e293b;
+    animation: fadeInIntro 0.6s ease-out;
+}
+
+@keyframes fadeInIntro {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.intro-content h2 {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    font-weight: 800;
+}
+
+.intro-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    text-transform: uppercase;
+    /* Uppercase fitting for word search */
+}
+
+.nickname-input {
+    padding: 1.2rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1.2rem;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+.nickname-input:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -10px var(--primary-glow);
+}
+
+.difficulty-select {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+    width: 100%;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1.5rem center;
+    background-size: 1.2rem;
+    text-transform: uppercase;
+}
+
+.difficulty-select:hover,
+.difficulty-select:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary);
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.button-group .primary-btn,
+.button-group .secondary-btn {
+    flex: 1;
+    padding: 1rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+}
+
+/* Background Decorations */
+.background-blobs {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    filter: blur(80px);
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.blob-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    top: -100px;
+    right: -100px;
+    opacity: 0.3;
+}
+
+.blob-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--secondary);
+    bottom: -50px;
+    left: -50px;
+    opacity: 0.2;
+}
+
+.blob-3 {
+    width: 250px;
+    height: 250px;
+    background: var(--primary);
+    top: 50%;
+    left: 20%;
+    opacity: 0.1;
+}
+
+/* Main Container */
+.game-container {
+    width: 100%;
+    max-width: 900px;
+    background: var(--surface);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.game-footer {
+    display: none;
+    /* Hidden by default, shown when game starts */
+    justify-content: center;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1rem;
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 1rem;
+}
+
+.game-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    flex-grow: 1;
+    /* Center title when back button is present */
+    text-align: center;
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.icon-btn {
+    background: var(--secondary);
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.icon-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    filter: brightness(1.1);
+}
+
+.home-btn {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    /* Bright Orange/Amber */
+    color: white !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4) !important;
+}
+
+.home-btn:hover {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.6) !important;
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+    /* Vivid Red */
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3) !important;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #f87171, #ef4444) !important;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5) !important;
+}
+
+.logout-link {
+    color: #ef4444 !important;
+    font-weight: 600 !important;
+    text-transform: none;
+    text-decoration: none;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.exit-link {
+    color: var(--text-dim) !important;
+    font-weight: 600 !important;
+    text-transform: none;
+    text-decoration: none;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.exit-link:hover {
+    color: var(--text) !important;
+    text-decoration: underline;
+    opacity: 1;
+}
+
+.stats-panel {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.stat-item .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+}
+
+.stat-item .value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.game-body {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.game-board-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 320px;
+    max-width: 650px;
+}
+
+.grid-container {
+    width: 100%;
+    aspect-ratio: 1;
+    display: grid;
+    gap: 4px;
+    background: rgba(15, 23, 42, 0.5);
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+}
+
+.intro-screen {
+    position: fixed;
+    /* Make it cover the whole app, not just the board */
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background: url('file:///C:/Users/LAB/.gemini/antigravity/brain/dc8103d8-5842-4fc0-820c-aeb7c2247125/colorful_word_search_bg_1769711168182.png') no-repeat center center;
+    background-size: cover;
+}
+
+.word-list-container {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.word-list-container h2 {
+    font-size: 1.25rem;
+    color: var(--text-dim);
+}
+
+#word-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#word-list li {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+#word-list li.found {
+    background: var(--success);
+    color: white;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Grid Cells */
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.1s;
+    aspect-ratio: 1;
+}
+
+.cell:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cell.selected {
+    background: var(--primary);
+    color: white;
+    transform: scale(0.95);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.cell.found {
+    background: var(--success);
+    color: white;
+}
+
+.text-btn {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+    margin-top: 0.5rem;
+}
+
+.text-btn:hover {
+    color: var(--text);
+}
+
+/* Buttons */
+.primary-btn,
+.secondary-btn {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    border: none;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 10px 20px -5px var(--primary-glow);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px var(--primary-glow);
+}
+
+.secondary-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+    width: 100%;
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+    .game-body {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .word-list-container {
+        width: 100%;
+    }
+
+    #word-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #word-list li {
+        width: auto;
+        min-width: 80px;
+    }
+
+    .game-container {
+        padding: 1.5rem;
+        height: auto;
+    }
+}
+
+/* Difficulty Select Styles */
+.intro-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.95);
+    /* Slightly darker/more opaque */
+    padding: 2.5rem;
+    /* More padding */
+    border-radius: 20px;
+    /* Softer corners */
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.15);
+    /* Subtle glow */
+    width: 100%;
+    max-width: 400px;
+    /* Fixed max width for consistent look */
+}
+
+.intro-content h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.nickname-input {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1.1rem;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+}
+
+.nickname-input:focus {
+    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px var(--primary-glow);
+}
+
+.difficulty-select {
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+    width: 100%;
+    appearance: none;
+    /* Remove default arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2rem;
+}
+
+.difficulty-select:hover,
+.difficulty-select:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary);
+}
+
+.difficulty-select option {
+    background: var(--background);
+    color: var(--text);
+    padding: 10px;
+}
