@@ -443,6 +443,12 @@ body {
     padding: 10px;
     border-radius: 12px;
     border: 1px solid var(--glass-border);
+    touch-action: none;
+    /* Previne scroll durante seleção de palavras */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .intro-screen {
@@ -505,6 +511,10 @@ body {
     cursor: pointer;
     transition: all 0.1s;
     aspect-ratio: 1;
+    touch-action: none;
+    /* Melhor controle touch */
+    -webkit-tap-highlight-color: transparent;
+    /* Remove highlight azul no mobile */
 }
 
 .cell:hover {

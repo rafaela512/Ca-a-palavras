@@ -200,12 +200,20 @@ function renderGrid() {
             cell.dataset.x = x;
             cell.dataset.y = y;
 
+            // Eventos de Mouse
             cell.addEventListener('mousedown', handleMouseDown);
             cell.addEventListener('mouseover', handleMouseOver);
+
+            // Eventos Touch para dispositivos móveis
+            cell.addEventListener('touchstart', handleTouchStart, { passive: false });
+            cell.addEventListener('touchmove', handleTouchMove, { passive: false });
+
             gridContainer.appendChild(cell);
         }
     }
     window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('touchcancel', handleTouchEnd);
 }
 
 function renderWordList() {
@@ -266,6 +274,81 @@ function handleMouseOver(e) {
 
 function handleMouseUp() {
     if (!gameState.selecting) return;
+    gameState.selecting = false;
+
+    const selectedText = gameState.currentSelection
+        .map(pos => gameState.grid[pos.y][pos.x])
+        .join('');
+
+    const reversedText = selectedText.split('').reverse().join('');
+
+    if (currentConfig.words.includes(selectedText) && !gameState.foundWords.includes(selectedText)) {
+        foundWord(selectedText);
+    } else if (currentConfig.words.includes(reversedText) && !gameState.foundWords.includes(reversedText)) {
+        foundWord(reversedText);
+    } else {
+        clearSelection();
+    }
+}
+
+// Touch Event Handlers
+function handleTouchStart(e) {
+    e.preventDefault(); // Previne scroll e zoom
+    if (!e.target.classList.contains('cell')) return;
+
+    gameState.selecting = true;
+    gameState.selectionStart = {
+        x: parseInt(e.target.dataset.x),
+        y: parseInt(e.target.dataset.y)
+    };
+    gameState.currentSelection = [gameState.selectionStart];
+    clearSelection();
+    e.target.classList.add('selected');
+}
+
+function handleTouchMove(e) {
+    e.preventDefault(); // Previne scroll
+    if (!gameState.selecting) return;
+
+    // Pega o touch atual
+    const touch = e.touches[0];
+
+    // Descobre qual célula está sob o dedo
+    const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+
+    if (!elementUnderFinger || !elementUnderFinger.classList.contains('cell')) return;
+
+    const currentX = parseInt(elementUnderFinger.dataset.x);
+    const currentY = parseInt(elementUnderFinger.dataset.y);
+
+    const dx = currentX - gameState.selectionStart.x;
+    const dy = currentY - gameState.selectionStart.y;
+
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
+
+    // Verifica se o movimento é horizontal, vertical ou diagonal de 45 graus
+    if (dx === 0 || dy === 0 || absDx === absDy) {
+        clearSelection();
+        const steps = Math.max(absDx, absDy);
+        const stepX = dx === 0 ? 0 : dx / steps;
+        const stepY = dy === 0 ? 0 : dy / steps;
+
+        gameState.currentSelection = [];
+        for (let i = 0; i <= steps; i++) {
+            const x = gameState.selectionStart.x + Math.round(stepX * i);
+            const y = gameState.selectionStart.y + Math.round(stepY * i);
+            gameState.currentSelection.push({ x, y });
+            const cell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+            if (cell) cell.classList.add('selected');
+        }
+    }
+}
+
+function handleTouchEnd(e) {
+    if (!gameState.selecting) return;
+    e.preventDefault();
+
     gameState.selecting = false;
 
     const selectedText = gameState.currentSelection
