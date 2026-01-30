@@ -2,6 +2,7 @@ const DIFFICULTY_CONFIG = {
     easy: {
         gridSize: 10,
         words: ['WEB', 'HTML', 'CSS', 'DOM', 'API', 'JAVA', 'CODE'],
+        timeLimit: 300, // 5 minutos
         directions: [
             { x: 1, y: 0 },   // Horizontal
             { x: 0, y: 1 }    // Vertical
@@ -10,6 +11,7 @@ const DIFFICULTY_CONFIG = {
     medium: {
         gridSize: 14,
         words: ['JAVASCRIPT', 'FRONTEND', 'BACKEND', 'DATABASE', 'SERVIDOR', 'BROWSER', 'MOBILE', 'DEBUG'],
+        timeLimit: 420, // 7 minutos
         directions: [
             { x: 1, y: 0 },   // Horizontal
             { x: 0, y: 1 },   // Vertical
@@ -19,6 +21,7 @@ const DIFFICULTY_CONFIG = {
     hard: {
         gridSize: 18,
         words: ['ASSINCRONISMO', 'COMPLEXIDADE', 'POLIMORFISMO', 'ABSTRACAO', 'FRAMEWORK', 'TYPESCRIPT', 'DEPLOYMENT', 'RESPONSIVIDADE', 'FULLSTACK'],
+        timeLimit: 600, // 10 minutos
         directions: [
             { x: 1, y: 0 },   // Horizontal
             { x: 0, y: 1 },   // Vertical
@@ -397,16 +400,93 @@ function updateScore() {
 
 function startTimer() {
     if (gameState.timerInterval) clearInterval(gameState.timerInterval);
+
+    // Iniciar com o tempo limite da dificuldade
+    gameState.timer = currentConfig.timeLimit;
+    updateTimerDisplay();
+
     gameState.timerInterval = setInterval(() => {
-        gameState.timer++;
-        const mins = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
-        const secs = (gameState.timer % 60).toString().padStart(2, '0');
-        timerElement.textContent = `${mins}:${secs}`;
+        gameState.timer--;
+        updateTimerDisplay();
+
+        // Alertas visuais quando o tempo está acabando
+        if (gameState.timer <= 30 && gameState.timer > 0) {
+            timerElement.classList.add('timer-warning');
+            timerElement.style.animation = 'pulse 1s infinite';
+        } else if (gameState.timer <= 10 && gameState.timer > 0) {
+            timerElement.classList.add('timer-critical');
+            timerElement.classList.remove('timer-warning');
+        }
+
+        // Game over quando o tempo acabar
+        if (gameState.timer <= 0) {
+            gameOver();
+        }
     }, 1000);
+}
+
+function updateTimerDisplay() {
+    const mins = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
+    const secs = (gameState.timer % 60).toString().padStart(2, '0');
+    timerElement.textContent = `${mins}:${secs}`;
+}
+
+function gameOver() {
+    clearInterval(gameState.timerInterval);
+
+    // Remove classes de animação
+    timerElement.classList.remove('timer-warning', 'timer-critical');
+    timerElement.style.animation = '';
+
+    // Criar modal de Game Over
+    const gameOverModal = document.createElement('div');
+    gameOverModal.className = 'modal-overlay';
+    gameOverModal.style.display = 'flex';
+    gameOverModal.innerHTML = `
+        <div class="modal-content">
+            <h2 style="color: #ef4444;">⏰ Tempo Esgotado! ⏰</h2>
+            <p>Você não conseguiu encontrar todas as palavras a tempo.</p>
+            <div class="modal-stats">
+                <div class="stat">
+                    <span>Palavras Encontradas</span>
+                    <span>${gameState.foundWords.length} / ${currentConfig.words.length}</span>
+                </div>
+                <div class="stat">
+                    <span>Pontos</span>
+                    <span id="gameover-score">${gameState.score}</span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="gameover-retry-btn" class="primary-btn">Tentar Novamente</button>
+                <button id="gameover-menu-btn" class="secondary-btn home-btn">Voltar ao Início</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(gameOverModal);
+
+    // Event listeners para os botões
+    document.getElementById('gameover-retry-btn').addEventListener('click', () => {
+        document.body.removeChild(gameOverModal);
+        initGame();
+    });
+
+    document.getElementById('gameover-menu-btn').addEventListener('click', () => {
+        document.body.removeChild(gameOverModal);
+        backToMenu();
+    });
 }
 
 function victory() {
     clearInterval(gameState.timerInterval);
+
+    // Remove classes de animação do timer
+    timerElement.classList.remove('timer-warning', 'timer-critical');
+    timerElement.style.animation = '';
+
+    // Calcular bônus de tempo restante
+    const timeBonus = gameState.timer * 10; // 10 pontos por segundo restante
+    gameState.score += timeBonus;
 
     // Show Modal
     modalDifficulty.textContent = difficultySelect.options[difficultySelect.selectedIndex].text;
@@ -416,6 +496,19 @@ function victory() {
     if (playerNicknameDisplay) {
         playerNicknameDisplay.textContent = playerNickname;
     }
+
+    // Mostrar bônus de tempo se houver
+    if (timeBonus > 0) {
+        const modalStats = document.querySelector('.modal-stats');
+        const bonusDiv = document.createElement('div');
+        bonusDiv.className = 'stat';
+        bonusDiv.innerHTML = `
+            <span>Bônus de Tempo</span>
+            <span style="color: var(--success);">+${timeBonus}</span>
+        `;
+        modalStats.appendChild(bonusDiv);
+    }
+
     victoryModal.style.display = 'flex';
 }
 
