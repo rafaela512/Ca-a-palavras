@@ -111,6 +111,7 @@ function initGame() {
     // Apply Difficulty Theme
     document.body.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-hard');
     document.body.classList.add(`difficulty-${selectedDifficulty}`);
+    document.body.classList.add('game-active'); // Show grid container
 
     gameState.foundWords = [];
     gameState.score = 0;
@@ -625,7 +626,7 @@ function backToMenu() {
     if (headerLogoutBtn) headerLogoutBtn.style.display = 'none';
     victoryModal.style.display = 'none';
     rankingModal.style.display = 'none';
-    document.body.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-hard');
+    document.body.classList.remove('difficulty-easy', 'difficulty-medium', 'difficulty-hard', 'game-active');
 
     checkLoginState();
 

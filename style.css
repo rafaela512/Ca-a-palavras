@@ -142,7 +142,7 @@ body.difficulty-hard .cell {
 .grid-container {
     width: 100%;
     aspect-ratio: 1;
-    display: grid;
+    display: none;
     gap: 6px;
     background: rgba(255, 255, 255, 0.03);
     padding: 15px;
@@ -1122,3 +1122,8 @@ body {
 }
 
      
+
+/* Show grid when game is active */
+body.game-active .grid-container {
+    display: grid;
+}
